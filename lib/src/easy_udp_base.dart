@@ -26,6 +26,38 @@ class EasyUDPSocket {
         reuseAddress: reuseAddress, reusePort: reusePort, ttl: ttl);
   }
 
+  static Future<EasyUDPSocket> bindSimple(int port) async {
+    RawDatagramSocket socket =
+          await RawDatagramSocket.bind(InternetAddress.anyIPv4, 6466);
+    return EasyUDPSocket(socket);
+  }
+
+  static Future<EasyUDPSocket> bindMulticast(String ip, int port) async {
+    RawDatagramSocket socket =
+          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
+      try {
+        InternetAddress group = (await InternetAddress.lookup(ip))[0];
+        socket.joinMulticast(group);
+        socket.multicastLoopback = false;
+        return EasyUDPSocket(socket);
+      } catch (e) {
+        print('create multicast failure: $e');
+        return null;
+      }
+  }
+
+  static Future<EasyUDPSocket> bindBroadcast(int port) async {
+    RawDatagramSocket socket =
+          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
+      try {
+        socket.broadcastEnabled = true;
+        return EasyUDPSocket(socket);
+      } catch (e) {
+        print('create broadcast failure: $e');
+        return null;
+      }
+  }
+
   /// receive a Datagram from the socket.
   Future<Datagram> receive({int timeout, bool explode = false}) {
     final completer = Completer<Datagram>.sync();
