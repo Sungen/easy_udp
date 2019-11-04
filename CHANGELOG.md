@@ -1,3 +1,7 @@
+## 1.2.1+1
+
+- modify readme
+
 ## 1.2.1
 
 - add try/catch handler

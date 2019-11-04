@@ -11,13 +11,13 @@ usage example:
 
 ```dart
 import 'dart:convert';
-import 'package:easy_udp/easy_udp.dart';
+import 'package:easy_udp_socket/easy_udp_socket.dart';
 
 start_server() async {
   // Create a EasyUDPSocket and bind to localhost:7777,
   // Note that you can also manually create a RawDatagramSocket 
   // and pass it to EasyUDPSocket(..) to create a EasyUDPSocket.
-  final socket = await EasyUDPSocket.bind('localhost', 7777);
+  final socket = await EasyUDPSocket.bindSimple(7777);
 
   while (true) {
     // Rather than subscribing to a stream of RawSocketEvents and
@@ -35,7 +35,7 @@ start_server() async {
 }
 
 start_client(int port) async {
-  final socket = await EasyUDPSocket.bind('localhost', port);
+  final socket = await EasyUDPSocket.bindSimple(port);
   socket.send(ascii.encode('ping'), 'localhost', 7777);
   final resp = await socket.receive();
   print('Client $port received: ${ascii.decode(resp.data)}');
@@ -43,6 +43,41 @@ start_client(int port) async {
   // `close` method of EasyUDPSocket is awaitable.
   await socket.close();
   print('Client $port closed');
+}
+
+start_multicast_server() async {
+  //TODO: here create a multicast server
+}
+
+start_multicast_client(int port) async {
+  final socket = await EasyUDPSocket.bindMulticast('224.0.2.200',port);
+  if (socket != null) {
+    socket.send(ascii.encode('ping'), '224.0.2.200', 7777);
+    final resp = await socket.receive();
+    print('Client $port received: ${ascii.decode(resp.data)}');
+
+    // `close` method of EasyUDPSocket is awaitable.
+    await socket.close();
+    print('Client $port closed');
+  }
+}
+
+start_broadcat_server(int port) async {
+  //TODO: here create a broadcast server
+}
+
+// mark: the port must be server broadcast port
+start_broadcast_client(int port) async {
+  final socket = await EasyUDPSocket.bindBroadcast(port);
+  if (socket != null) {
+    socket.send(ascii.encode('ping'), '192.168.1.255', port);
+    final resp = await socket.receive();
+    print('Client $port received: ${ascii.decode(resp.data)}');
+
+    // `close` method of EasyUDPSocket is awaitable.
+    await socket.close();
+    print('Client $port closed');
+  }
 }
 
 main() async {
