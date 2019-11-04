@@ -99,4 +99,4 @@ if(datagram == null) {
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: http://github.com/xtyxtyx/easy_udp/issues
+[tracker]: https://github.com/Sungen/easy_udp/issues

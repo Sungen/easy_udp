@@ -1,3 +1,7 @@
+## 1.2.1
+
+- add try/catch handler
+
 ## 1.2.0
 
 - add explode option

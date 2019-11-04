@@ -41,12 +41,24 @@ class EasyUDPSocket {
       });
     }
     Future.microtask(() async {
-      while ((await _eventQueue.peek) != RawSocketEvent.read) {
-        await _eventQueue.next;
-      }
-      if (!completer.isCompleted) {
-        await _eventQueue.next;
-        completer.complete(rawSocket.receive());
+      try {
+        while (true) {
+          final event = await _eventQueue.peek;
+          if (event == RawSocketEvent.closed) {
+            if (completer.isCompleted) return;
+            completer.complete(null);
+            break;
+          } else if (event == RawSocketEvent.read) {
+            await _eventQueue.next;
+            if (completer.isCompleted) return;
+            completer.complete(rawSocket.receive());
+            break;
+          } else {
+            await _eventQueue.next;
+          }
+        }
+      } catch (e) {
+        print('receive fail: $e');
       }
     });
     return completer.future;
@@ -73,9 +85,14 @@ class EasyUDPSocket {
 
   /// close the socket.
   Future<void> close() async {
-    rawSocket.close();
-    while ((await _eventQueue.next) != RawSocketEvent.closed) {
-      continue;
+    try {
+      rawSocket.close();
+      while (await _eventQueue.peek != RawSocketEvent.closed) {
+        await _eventQueue.next;
+      }
+      await _eventQueue.cancel();
+    } catch (e) {
+      print('close fail: $e');
     }
   }
 }
