@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:easy_udp/easy_udp.dart';
+import 'package:easy_udp_socket/easy_udp_socket.dart';
 
 start_server() async {
   // Create a EasyUDPSocket and bind to localhost:7777,

@@ -48,4 +48,4 @@
 /// ````
 library easy_udp;
 
-export 'src/easy_udp_base.dart';
+export 'src/easy_udp_socket_base.dart';

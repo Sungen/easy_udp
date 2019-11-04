@@ -1,6 +1,7 @@
 ## 1.2.1
 
 - add try/catch handler
+- add unicast/multicast/broadcast creator
 
 ## 1.2.0
 
