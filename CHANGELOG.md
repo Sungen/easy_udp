@@ -1,3 +1,7 @@
+## 1.2.1+2
+
+- fix bug
+
 ## 1.2.1+1
 
 - modify readme

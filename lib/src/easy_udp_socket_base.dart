@@ -28,7 +28,7 @@ class EasyUDPSocket {
 
   static Future<EasyUDPSocket> bindSimple(int port) async {
     RawDatagramSocket socket =
-          await RawDatagramSocket.bind(InternetAddress.anyIPv4, 6466);
+          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
     return EasyUDPSocket(socket);
   }
 
