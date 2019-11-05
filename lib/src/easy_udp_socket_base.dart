@@ -26,15 +26,15 @@ class EasyUDPSocket {
         reuseAddress: reuseAddress, reusePort: reusePort, ttl: ttl);
   }
 
-  static Future<EasyUDPSocket> bindSimple(int port) async {
+  static Future<EasyUDPSocket> bindSimple(int port, [bool reusePort = false]) async {
     RawDatagramSocket socket =
-          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
+          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port, reusePort: reusePort);
     return EasyUDPSocket(socket);
   }
 
-  static Future<EasyUDPSocket> bindMulticast(String ip, int port) async {
+  static Future<EasyUDPSocket> bindMulticast(String ip, int port, [bool reusePort = false]) async {
     RawDatagramSocket socket =
-          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
+          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port, reusePort: reusePort);
       try {
         InternetAddress group = (await InternetAddress.lookup(ip))[0];
         socket.joinMulticast(group);
@@ -46,9 +46,9 @@ class EasyUDPSocket {
       }
   }
 
-  static Future<EasyUDPSocket> bindBroadcast(int port) async {
+  static Future<EasyUDPSocket> bindBroadcast(int port, [bool reusePort = false]) async {
     RawDatagramSocket socket =
-          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
+          await RawDatagramSocket.bind(InternetAddress.anyIPv4, port, reusePort: reusePort);
       try {
         socket.broadcastEnabled = true;
         return EasyUDPSocket(socket);
